@@ -1,0 +1,131 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block title %}
+<title>Accueil | Bienvenue sur la plateforme de gestion de réunion AGUIPEX</title>
+{% endblock title %}
+{% block content %}
+<div class="col-xl-9 col-lg-8 col-md-12">
+    {% comment %} <div class="quicklink-sidebar-menu ctm-border-radius shadow-sm grow bg-white card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <ul class="list-group list-group-horizontal-lg mb-0">
+                <li class="list-group-item text-center active button-5">
+                    <a href="{% url 'aguipex-home' %}" class="text-white">TOUTES LES REUNIONS</a>
+                </li>
+            </ul>
+            
+        </div>
+    </div> {% endcomment %}
+    
+    <div class="card shadow-sm grow ctm-border-radius">
+        <div class="card-body align-center">
+            <h4 class="card-title float-left mb-0 mt-2">{{ total_meetings }} RÉUNIONS</h4>
+            <ul class="nav nav-tabs float-right border-0 tab-list-emp">
+                <li class="nav-item pl-3">
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'meeting_create' %}" class="btn btn-theme button-1 text-white ctm-border-radius p-2 add-person ctm-btn-padding">
+                        <i class="fa fa-plus"></i> Ajouter une réunion
+                    </a>
+                {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        {% for meeting in meetings %}
+        <div class="col-md-6">
+            <div class="ctm-border-radius shadow-sm grow card">
+                <div class="card-header">
+                    <h4 class="card-title d-inline-block mb-0"><strong>{{ meeting.title|upper }}</strong></h4>
+                    <div class="team-action-icon float-right mt-0">
+                        {% if request.user.is_superuser %}
+                        <span data-toggle="modal" data-target="#edit">
+                            <a href="{% url 'meeting_update' meeting.pk %}" class="btn btn-theme text-white ctm-border-radius" title="Edit">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </span>
+                        <span data-toggle="modal" data-target="#delete">
+                            <a href="{% url 'meeting_delete' meeting.pk %}" class="btn btn-theme text-white ctm-border-radius" title="Delete">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </span>
+                        {% endif %}
+                    </div>
+                    <p>
+                        <strong class="text-primary"></strong> 
+                        <span class="badge 
+                            {% if meeting.meeting_status == 'programmer' %}
+                                bg-danger
+                            {% elif meeting.meeting_status == 'en_cours' %}
+                                bg-primary
+                            {% elif meeting.meeting_status == 'terminer' %}
+                                bg-success
+                            {% else %}
+                                bg-secondary
+                            {% endif %}
+                        " style="color:#ffffff;">
+                            {{ meeting.get_meeting_status_display|upper }}
+                        </span>
+                    </p>
+                    {% if meeting.meeting_status == "programmer" %}
+                    Le <span>{{meeting.date_debut}}</span>
+                    {% else %}
+                    C'était le <span>{{meeting.date_debut}}</span>
+                    {% endif %}
+                    
+                </div>
+                
+                <div class="card-body">
+                    {% comment %} <p class="card-text">{{ meeting.body|truncatechars:100 }}</p> {% endcomment %}
+
+                    <span class="avatar bg-warning" data-toggle="tooltip" data-placement="top" title="{{ meeting.reporter.username }}">
+                        <i class="fa fa-file"></i>
+                        {% comment %} <img src="{% if meeting.reporter.profile.image %}{{ meeting.reporter.profile.image.url }}{% else %}{% static 'assets/img/profiles/default.png' %}{% endif %}" alt="{{ meeting.author.username }}" class="img-fluid"> {% endcomment %}
+                    </span>
+                    <a href="{% url 'meeting_detail' meeting.pk %}" class="btn btn-theme float-right ctm-border-radius text-white button-1" data-toggle="modal" data-target="#addmembers">Voir</a>
+                    <p><strong class="text-primary"></strong> <span class="text-white badge badge-secondary" style="#ffffff; !important">{{meeting.reporter.profile.full_name }}</span></p>
+                    <span>{{meeting.rapport_deadline}}</span>
+                    {% if meeting.has_reporter_missed_deadline %}
+                        <p class="text-danger" style="font-size:12px; font-weight:700px;">Le reporter <strong>{{ meeting.reporter.username }}</strong> a manqué le délai pour soumettre le rapport.</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-muted">Aucune réunion trouvée.</p>
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Precedent</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for num in paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><a class="page-link text-white bg-primary" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link text-primary" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Suivant</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+    
+</div>
+{% endblock content %}

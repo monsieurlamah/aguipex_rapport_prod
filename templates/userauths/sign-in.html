@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.png' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/css/lnr-icon.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <title>CONNEXION | AGUIPEX REUNION - LA PLATEFORME DE GESTION DE REUNION</title>
+
+    <!--[if lt IE 9]>
+      <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'assets/js/respond.min.js' %}"></script>
+    <![endif]-->
+  </head>
+  <body>
+    {% comment %} <div id="loader-wrapper">
+      <div class="loader">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div> {% endcomment %}
+
+    <div class="inner-wrapper login-body">
+      <div class="login-wrapper">
+        <div class="container">
+          <div class="loginbox shadow-sm grow">
+            <div class="login-left">
+              <img class="img-fluid" src="{% static 'assets/img/logo.png' %}" alt="Logo" />
+            </div>
+            <div class="login-right">
+              <div class="login-right-wrap">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{message.tags}}">
+                        <strong>{{message}}</strong>
+                    </div>
+                {% endfor %}
+                {% endif %}
+
+                <script>
+                    setTimeout(()=>{
+                     $(".alert").alert("close")
+                    }, 3000)
+                </script>
+                <h1>Connexion</h1>
+                <p class="account-subtitle">Accès à la plateforme</p>
+
+                <form method="post">
+                {% csrf_token %}
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="email"
+                      placeholder="Adresse E-mail..."
+                    />
+                  </div>
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="password"
+                      name="password"
+                      placeholder="Votre mot de passe"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <button
+                      class="btn btn-theme button-1 text-white ctm-border-radius btn-block"
+                      type="submit"
+                    >
+                    Se connecter
+                    </button>
+                  </div>
+                </form>
+
+                <div class="text-center forgotpass">
+                  <a href="forgot-password.html">Mot de passe oublié?</a>
+                </div>
+                <!-- <div class="login-or">
+                  <span class="or-line"></span>
+                  <span class="span-or">ou</span>
+                </div>
+
+                <div class="social-login">
+                  <span>Login with</span>
+                  <a href="javascript:void(0)" class="facebook"
+                    ><i class="fa fa-facebook"></i></a
+                  ><a href="javascript:void(0)" class="google"
+                    ><i class="fa fa-google"></i
+                  ></a>
+                </div> -->
+
+                <div class="text-center dont-have">
+                  Vous n'avez pas de compte ? <a href="{% url 'userauths-sign-up' %}">Inscrivez-vous</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="{% static 'assets/js/jquery-3.2.1.min.js' %}"
+      type="bee572ff5a530fb00018fc9a-text/javascript"
+    ></script>
+
+    <script
+      src="{% static 'assets/js/popper.min.js' %}"
+      type="bee572ff5a530fb00018fc9a-text/javascript"
+    ></script>
+    <script
+      src="{% static 'assets/js/bootstrap.min.js' %}"
+      type="bee572ff5a530fb00018fc9a-text/javascript"
+    ></script>
+
+    <script
+      src="{% static 'assets/plugins/theia-sticky-sidebar/ResizeSensor.js' %}"
+      type="bee572ff5a530fb00018fc9a-text/javascript"
+    ></script>
+    <script
+      src="{% static 'assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"
+      type="bee572ff5a530fb00018fc9a-text/javascript"
+    ></script>
+
+    <script
+      src="{% static 'assets/js/script.js' %}"
+      type="bee572ff5a530fb00018fc9a-text/javascript"
+    ></script>
+    <script
+      src="{% static '../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js' %}"
+      data-cf-settings="bee572ff5a530fb00018fc9a-|49"
+      defer
+    ></script>
+  </body>
+
+</html>

@@ -1,0 +1,294 @@
+{% extends "partials/base.html" %}
+{% block title %}
+<title>Détail d'une réunion | Bienvenue sur la plateforme de gestion de réunion AGUIPEX</title>
+{% endblock title %}
+{% block content %}
+<style>
+    /* Style pour la carte des dernières réunions */
+    .office-card-last {
+        border: 1px solid #e0e0e0;
+        /* Bordure légère autour de la carte */
+        background-color: #ffffff;
+        /* Couleur de fond blanche pour la carte */
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        /* Couleur de fond pour l'en-tête de la carte */
+        border-bottom: 1px solid #e0e0e0;
+        /* Bordure inférieure pour séparer l'en-tête du corps */
+    }
+
+    .card-title {
+        font-weight: bold;
+        /* Titre en gras */
+        color: #333;
+        /* Couleur du titre */
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        /* Espacement intérieur du corps de la carte */
+    }
+
+    .list-unstyled {
+        padding-left: 0;
+        /* Enlever le retrait par défaut pour les listes non ordonnées */
+    }
+
+    .list-unstyled li {
+        border-bottom: 1px solid #e0e0e0;
+        /* Ligne de séparation entre les éléments */
+        padding: 0.5rem 0;
+        /* Espacement autour des éléments */
+    }
+
+    .list-unstyled a {
+        font-size: 1rem;
+        /* Taille de police pour les titres des réunions */
+        color: #007bff;
+        /* Couleur des liens */
+        transition: color 0.3s ease;
+        /* Effet de transition pour les changements de couleur */
+    }
+
+    .list-unstyled a:hover {
+        color: #0056b3;
+        /* Couleur du lien au survol */
+        text-decoration: underline;
+        /* Souligner le lien au survol */
+    }
+</style>
+<div class="col-xl-9 col-lg-8  col-md-12">
+    <div class="quicklink-sidebar-menu ctm-border-radius shadow-sm grow bg-white p-4 mb-4 card">
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-sm-12 d-flex">
+            <div class="card flex-fill ctm-border-radius shadow-sm grow">
+                <div class="card-header align-items-center">
+                    <div class="d-flex justify-content-between ">
+                        <h4 class="card-title mb-0">{{ meeting.title|upper }}</h4>
+                        {% if meeting.minutes_document %}
+                        <a href="{{ meeting.minutes_document.url }}"
+                            class="button-1 btn btn-theme ctm-border-radius text-white" download>Télécharger le rapport</a>
+                        {% else %}
+                        <p class="text-muted mb-0"><i class="fa fa-file"></i> {{ meeting.rapport_deadline }}</p>
+                        {% endif %}
+                        </div>
+                        {% if meeting.has_reporter_missed_deadline %}
+                        <div class="float-right">
+                        <p class="text-danger" style="font-size:12px; font-weight:700px;">Le reporter <strong>{{ meeting.reporter.username }}</strong> a manqué le délai pour soumettre le rapport.</p>
+                        </div>
+                        {% endif %}
+                    <p><strong class="text-primary">Date de début: </strong> <span class="text-secondary">{{ meeting.date_debut }}</span></p>
+                    <p><strong class="text-primary">Durée: </strong> <span class="text-secondary">{{ meeting.duration }}</span></p> 
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <div>
+                        <div class="media mb-4">
+                            <div class="media-body">
+                                <p class="card-text">{{ meeting.body }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p><strong class="text-primary">CR: </strong> <span class="text-white badge badge-secondary">{{ meeting.reporter|upper }}</span></p>
+                            <p><strong class="text-primary"></strong> <span class="text-white badge badge-secondary">{{ meeting.meeting_status|upper }}</span></p>
+                            {% comment %} <p><strong class="text-primary">Délai de soumission: </strong> <span class="text-secondary">{{ meeting.deadline_hours }}h</span></p> {% endcomment %}
+                            {% comment %} <p><strong class="text-primary">Date de fin: </strong> <span class="text-secondary">{{ meeting.date_fin }}h</span></p>
+                            <p><strong class="text-primary">Durée: </strong> <span class="text-secondary">{{ meeting.duration }}</span></p> {% endcomment %}
+                        </div>
+                    </div>
+                    <div class="mt-auto text-end absolute" style="text-align:right; !important">
+                        <a href="{% url 'scheduled_participants' meeting.pk %}" class="btn btn-theme button-1 ctm-border-radius text-white">Participant prévu</a>
+                        <a href="{% url 'participant_list' meeting.pk %}" class="btn btn-theme button-1 ctm-border-radius text-white">Voir les participants</a>
+                        {% if request.user.is_superuser %}
+                        <a href="{% url 'add_participant' meeting.pk %}" class="btn btn-theme button-1 ctm-border-radius text-white">Ajouter un participant</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>     
+
+        <div class="col-md-4 col-sm-12 d-flex">
+            <div class="card flex-fill ctm-border-radius shadow-sm grow office-card-last">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Dernières Réunions</h4>
+                    <!-- Optionnel : ajouter une icône ou un autre élément de design -->
+                </div>
+                <div class="card-body">
+                    <!-- Ajouter une liste stylisée pour les réunions -->
+                    <ul class="list-unstyled">
+                        {% for latest_meeting in latest_meetings %}
+                        <li class="mb-2">
+                            <a href="{% url 'meeting_detail' latest_meeting.pk %}"
+                                class="d-block text-decoration-none text-primary">
+                                {{ latest_meeting.title }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <p class="text-muted">Aucune réunion récente.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card ctm-border-radius shadow-sm grow">
+                {% for review in meeting.reviews.all %}
+                <div class="card-header">
+                        <div class="d-inline-block">
+                            <h6 class="card-title mb-0">{{ review.full_name }}</h6>
+                            <span class="mb-0 ctm-text-sm">{{ review.review }}</span>
+                            <span class="mb-0 ctm-text-sm">{{ review.created_at|date:"d M Y H:i" }}</span>
+                        </div>
+                   
+                    </div>
+                {% empty %}
+                    <h5 class="p-2">Aucun avis pour cette réunion.</h5>
+                {% endfor %}
+                </div>
+            </div>
+       
+    </div>
+    <div id="response-message"></div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12 d-flex">
+            <div class="card flex-fill ctm-border-radius shadow-sm grow">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Votre avis</h4>
+                </div>
+                <form action="{% url 'add_review' meeting.pk %}" method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Entrer votre nom...">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="review" id="review" placeholder="Votre avis sur la réunion...">
+                        </div>
+                        <div class="team-action-icon float-right p-2">
+                            <button type="submit" class="btn btn-theme ctm-border-radius text-white"
+                                    data-toggle="tooltip" data-placement="bottom"
+                                    title="Ajouter votre commentaire">Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>        
+        <div class="col-md-6 col-sm-12 d-flex">
+            <div class="card flex-fill ctm-border-radius shadow-sm grow">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Valider votre présence</h4>
+                </div>
+                <div class="card-body">
+                    <form id="presence-form" method="post" action="{% url 'validate_presence' meeting.pk %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <select name="participant" class="form-control" id="participant">
+                                <option value="" disabled selected>Selectionner votre nom</option>
+                                {% for participant in meeting.participations.all %}
+                                <option value="{{ participant.participant.pk }}">{{ participant.participant.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="number_verify" placeholder="Entrer le numéro">
+                        </div>
+                        <div class="team-action-icon float-right">
+                            <button type="submit" class="btn btn-theme ctm-border-radius text-white"
+                                data-toggle="tooltip" data-placement="bottom" title="Valider votre présence">Valider
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- JavaScript pour gérer l'envoi AJAX -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('review-form');
+        const responseMessage = document.getElementById('response-message');
+    
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+    
+            const formData = new FormData(form);
+    
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken') // Ajoute le token CSRF
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    responseMessage.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    form.reset(); // Réinitialise le formulaire
+                } else {
+                    responseMessage.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                responseMessage.innerHTML = `<div class="alert alert-danger">Une erreur est survenue.</div>`;
+            });
+        });
+    });
+
+    // JavaScript pour gérer l'envoi AJAX Pour la vérification
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('presence-form');
+        
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+    
+            const formData = new FormData(form);
+    
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken') // Ajoute le token CSRF
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Succès',
+                        text: data.message,
+                    });
+                    form.reset(); // Réinitialise le formulaire
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: data.message,
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Une erreur est survenue.',
+                });
+            });
+        });
+    });
+    
+    </script>
+{% endblock content %}

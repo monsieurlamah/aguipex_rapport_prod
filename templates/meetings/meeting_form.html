@@ -1,0 +1,104 @@
+{% extends "partials/base.html" %}
+{% block content %}
+{% block title %}
+<title>Ajout d'une réunion | Bienvenue sur la plateforme de gestion de réunion AGUIPEX</title>
+{% endblock title %}
+<div class="col-xl-9 col-lg-8 col-md-12">
+  <div class="accordion add-employee" id="accordion-details">
+    <div class="card shadow-sm grow ctm-border-radius">
+      <div class="card-header" id="basic1">
+        <h4 class="cursor-pointer mb-0">
+          <a class="coll-arrow d-block text-dark" href="javascript:void(0)" data-toggle="collapse" data-target="#basic-one" aria-expanded="true">
+            CREATION D'UNE REUNION
+            <br /><span class="ctm-text-sm">Il s'agit de quelle réunion ?</span>
+          </a>
+        </h4>
+      </div>
+      <div class="card-body p-0">
+        <div id="basic-one" class="collapse show ctm-padding" aria-labelledby="basic1" data-parent="#accordion-details">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-4">
+                <div class="col form-group">
+                  {{ form.title.label_tag }} 
+                  {{ form.title }}
+                </div>
+              </div>
+
+              <div class="col-md-4 form-group">
+                <div class="col form-group">
+                  {{ form.date_debut.label_tag }}
+                  <div class="cal-icon">
+                    {{ form.date_debut }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="col form-group">
+                  {{ form.date_fin.label_tag }}
+                  <div class="cal-icon">
+                    {{ form.date_fin }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col form-group">
+                  {{ form.minutes_document.label_tag }}
+                  {{ form.minutes_document }}
+                </div>
+              </div>
+              <!--<div class="col-md-4">
+                <div class="col form-group">
+                  {{ form.tags.label_tag }}
+                  {{ form.tags }}
+                </div>
+              </div>-->
+              <div class="col-md-6">
+                <div class="col form-group">
+                  {{ form.meeting_status.label_tag }}
+                  {{ form.meeting_status }}
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col form-group">
+                  {{ form.deadline_hours.label_tag }}
+                  {{ form.deadline_hours }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="col form-group">
+                  {{ form.reporter.label_tag }}
+                  {{ form.reporter }}
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="col form-group">
+                  {{ form.body.label_tag }}
+                  {{ form.body }}
+                </div>
+              </div>
+              
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="submit-section text-center btn-add">
+                  <button class="btn btn-theme text-white ctm-border-radius button-1" type="submit">
+                    {% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}

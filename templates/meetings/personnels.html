@@ -1,0 +1,89 @@
+{% extends "partials/base.html" %} {% block title %}
+{% load static %}
+<title>
+  PERSONNELS AGUIPEX | Bienvenue sur la plateforme de gestion de réunion AGUIPEX
+</title>
+{% endblock title %} {% block content %}
+
+
+<div class="col-xl-9 col-lg-8 col-md-12">
+    <div
+      class="quicklink-sidebar-menu ctm-border-radius shadow-sm grow bg-white card"
+    >
+      <div class="card-body">
+        <ul class="list-group list-group-horizontal-lg">
+          <li class="list-group-item text-center active button-5">
+            <a href="employees.html" class="text-white">Tout le personnel</a>
+          </li>
+          {% comment %} <li class="list-group-item text-center button-6">
+            <a class="text-dark" href="employees-team.html">Teams</a>
+          </li>
+          <li class="list-group-item text-center button-6">
+            <a class="text-dark" href="employees-offices.html"
+              >Offices</a
+            > {% endcomment %}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card shadow-sm grow ctm-border-radius">
+      <div class="card-body align-center">
+        <h4 class="card-title float-left mb-0 mt-2">{{personnels.count}} personne{{personnels.count|pluralize}} inscrite{{personnels.count|pluralize}} sur la plateforme </h4>
+        <ul class="nav nav-tabs float-right border-0 tab-list-emp">
+          {% comment %} <li class="nav-item">
+            <a
+              class="nav-link active border-0 font-23 grid-view"
+              href="employees.html"
+              ><i class="fa fa-th-large" aria-hidden="true"></i
+            ></a>
+          </li> {% endcomment %}
+          {% comment %} <li class="nav-item">
+            <a
+              class="nav-link border-0 font-23 list-view"
+              href="employees-list.html"
+              ><i class="fa fa-list-ul" aria-hidden="true"></i
+            ></a>
+          </li> {% endcomment %}
+          <li class="nav-item pl-3">
+            {% if request.user.is_superuser %}
+            <a
+              href="/aguipex-admin/userauths/profile/add/"
+              class="btn btn-theme button-1 text-white ctm-border-radius p-2 add-person ctm-btn-padding"
+              ><i class="fa fa-plus"></i> Ajouter un personnel</a
+            >
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="ctm-border-radius shadow-sm grow card">
+      <div class="card-body">
+        <div class="row people-grid-row">
+          {% for personnel in personnels %}
+          <div class="col-md-6 col-lg-6 col-xl-4">
+              <div class="card widget-profile">
+                  <div class="card-body">
+                      <div class="pro-widget-content text-center">
+                          <div class="profile-info-widget">
+                              <a href="" class="booking-doc-img">
+                                  <img src="{% if personnel.image %}{{ personnel.image.url }}{% else %}{% static 'assets/img/profiles/default.png' %}{% endif %}" alt="User Image"/>
+                              </a>
+                              <div class="profile-det-info">
+                                  <h4><a href="" class="text-primary">{{ personnel.full_name }}</a></h4>
+                                  <div>
+                                      <p class="mb-0"><b>{{ personnel.fonction|title }}</b></p>
+                                      <p class="mb-0 ctm-text-sm">{{ personnel.user.email }}</p>
+                                      <p class="mb-0 ctm-text-sm">{{ personnel.phone }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

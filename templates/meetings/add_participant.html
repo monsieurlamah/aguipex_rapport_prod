@@ -1,0 +1,53 @@
+{% extends "partials/base.html" %}
+{% block title %}
+<title>Ajouter un participant | Bienvenue sur la plateforme de gestion de réunion AGUIPEX</title>
+{% endblock title %}
+{% block content %}
+<div class="col-xl-9 col-lg-8 col-md-12">
+    <div class="accordion add-employee" id="accordion-details">
+      <div class="card shadow-sm grow ctm-border-radius">
+        <div class="card-header" id="basic1">
+          <h4 class="cursor-pointer mb-0">
+            <a class="coll-arrow d-block text-dark" href="javascript:void(0)" data-toggle="collapse" data-target="#basic-one" aria-expanded="true">
+              AJOÛT D'UN PARTICIPANT
+              <br /><span class="ctm-text-sm">Ajouter un participant à la réunion {{ meeting.title }}</span>
+            </a>
+          </h4>
+        </div>
+        <div class="card-body p-0">
+          <div id="basic-one" class="collapse show ctm-padding" aria-labelledby="basic1" data-parent="#accordion-details">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="col form-group">
+                    {{ form.participant.label_tag }} 
+                    {{ form.participant }}
+                  </div>
+                </div>
+  
+                <div class="col-md-6 form-group">
+                  <div class="col form-group">
+                    {{ form.number_verify.label_tag }}
+                    <div class="cal-icon">
+                      {{ form.number_verify }}
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="submit-section text-center btn-add">
+                    <button class="btn btn-theme text-white ctm-border-radius button-1" type="submit">
+                     Ajouter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/lnr-icon.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <title>AGUIPEX - REUNION | LA PLATEFORME DE GESTION DE REUNION </title>
+</head>
+
+<body>
+    <div class="inner-wrapper login-body">
+        <div class="login-wrapper">
+            <div class="container">
+                <div class="loginbox shadow-sm grow">
+                    <div class="login-left">
+                        <img class="img-fluid" src="{% static 'assets/img/logo.png' %}" alt="Logo">
+                    </div>
+                    <div class="login-right">
+                        <div class="login-right-wrap">
+                            {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{message.tags}}">
+                                    <strong>{{message}}</strong>
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            <script>
+                                setTimeout(()=>{
+                                $(".alert").alert("close")
+                                }, 3000)
+                            </script>
+                            <h1>INSCRIPTION</h1>
+                            <p class="account-subtitle">Accès à la plateforme</p>
+                            {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <strong>Il y a des erreurs dans le formulaire :</strong>
+                                <ul>
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ field }}: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% else %}
+                            {% endif %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {{form.username}}
+                                    <small class="text-danger">{{ form.username.errors }}</small>
+                                </div>
+                                <div class="form-group">
+                                    {{form.email}}            
+                                    <small class="text-danger">{{ form.email.errors }}</small>                    
+                                </div>
+                                 
+                                <div class="form-group">
+                                    {{form.password1}}
+                                    <small class="text-danger"> {{ form.password1.errors }}</small>
+                                </div>
+                                <div class="form-group">
+                                    {{form.password2}}
+                                    <small class="text-danger">{{ form.password2.errors }}</small>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <button class="btn btn-theme button-1 text-white ctm-border-radius btn-block"
+                                        type="submit">S'inscrire</button>
+                                </div>
+                            </form>
+
+                            <!-- <div class="login-or">
+                                <span class="or-line"></span>
+                                <span class="span-or">or</span>
+                            </div>
+
+                            <div class="social-login">
+                                <span>Register with</span>
+                                <a href="javascript:void(0)" class="facebook"><i class="fa fa-facebook"></i></a><a
+                                    href="javascript:void(0)" class="google"><i class="fa fa-google"></i></a>
+                            </div> -->
+
+                            <div class="text-center dont-have">Vous avez déjà un compte? <a href="{% url 'userauths-sign-in' %}">Connectez-vous</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}" type="2da7200395621616a86c8732-text/javascript"></script>
+
+    <script src="{% static 'assets/js/popper.min.js' %}" type="2da7200395621616a86c8732-text/javascript"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}" type="2da7200395621616a86c8732-text/javascript"></script>
+
+    <script src="{% static 'assets/plugins/theia-sticky-sidebar/ResizeSensor.js' %}"
+        type="2da7200395621616a86c8732-text/javascript"></script>
+    <script src="{% static 'assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"
+        type="2da7200395621616a86c8732-text/javascript"></script>
+
+    <script src="{% static 'assets/js/script.js' %}" type="2da7200395621616a86c8732-text/javascript"></script>
+    <script src="{% static '../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js' %}"
+        data-cf-settings="2da7200395621616a86c8732-|49" defer></script>
+</body>
+
+<!-- Mirrored from dleohr.dreamstechnologies.com/template-1/dleohr-vertical/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 17 Jul 2024 12:01:40 GMT -->
+
+</html>
