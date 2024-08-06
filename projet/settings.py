@@ -37,7 +37,7 @@ SECRET_KEY = "django-insecure-2p#-36yb681&=o_(6-bes&naqp_a$9+t#^raaqq9%7i*pz+b2z
 DEBUG = False
 
 # ALLOWED_HOSTS = ['192.168.10.14', '192.168.10.35', 'localhost']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['aguipex-rapport.up.railway.app']
 
 
 # Application definition
